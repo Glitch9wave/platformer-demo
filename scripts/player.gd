@@ -24,9 +24,10 @@ func _physics_process(delta):
 		jump_buffer -= delta
 	
 	var offset = 0
-	var right = Input.is_action_pressed("ui_right")
-	var left = Input.is_action_pressed("ui_left")
-	if not right and not left:
+	var right = Input.is_action_pressed("ui_right") or Input.is_action_pressed("keycode_D")
+	var left = Input.is_action_pressed("ui_left") or Input.is_action_pressed("keycode_A")
+	
+	if (not right and not left) or (right and left):
 		if abs(velocity.x) < acceleration:
 			velocity.x = 0
 		else:
