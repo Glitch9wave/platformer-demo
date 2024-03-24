@@ -1,7 +1,7 @@
 extends CharacterBody2D
 
 func acceleration():
-	var effective_velocity = 1000
+	var effective_velocity = 700
 	var k = abs(velocity.x)/effective_velocity
 	
 	var max_acceleration:float = 500
@@ -53,7 +53,13 @@ func _physics_process(delta):
 			offset += -1;
 		velocity += offset * acceleration() * Vector2.RIGHT
 	
-	velocity += gravity * Vector2.DOWN
+	if velocity.y < 0:
+		velocity += gravity * Vector2.DOWN
+	elif not is_on_floor():
+		velocity += gravity * Vector2.DOWN * 2
+	
+	if velocity.y > 2000:
+		velocity.y = 2000
 	
 	move_and_slide()
 
