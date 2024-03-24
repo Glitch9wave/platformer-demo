@@ -1,16 +1,30 @@
 extends CharacterBody2D
 
-var acceleration = 100
-var max_speed = 500
+func acceleration():
+	var effective_velocity = 1000
+	var k = abs(velocity.x)/effective_velocity
+	
+	var max_acceleration:float = 500
+	var min_acceleration:float = 5
+	var r = min_acceleration / max_acceleration
+	
+	var result
+	
+	if k >= 1:
+		result = min_acceleration
+	else:
+		result = max_acceleration * ((0.5 - r) * cos(k * PI) + 0.5 + r)
+	
+	return result
+
 var jump_speed = -1300
 var gravity = 70
 
 var max_jump_buffer = 0.1
 var jump_buffer = 0.1
 
-# Called when the node enters the scene tree for the first time.
 func _ready():
-	pass # Replace with function body.
+	pass
 	
 
 func _input(event):
@@ -28,20 +42,16 @@ func _physics_process(delta):
 	var left = Input.is_action_pressed("ui_left") or Input.is_action_pressed("keycode_A")
 	
 	if (not right and not left) or (right and left):
-		if abs(velocity.x) < acceleration:
+		if abs(velocity.x) < 100:
 			velocity.x = 0
 		else:
-			velocity.x -= acceleration * sign(velocity.x);
+			velocity.x -= 100 * sign(velocity.x);
 	else:
 		if right:
 			offset += 1;
 		if left: 
 			offset += -1;
-		velocity += offset * acceleration * Vector2.RIGHT
-		
-		if abs(velocity.x) > max_speed:
-			velocity.x = max_speed * sign(velocity.x)
-	
+		velocity += offset * acceleration() * Vector2.RIGHT
 	
 	velocity += gravity * Vector2.DOWN
 	
