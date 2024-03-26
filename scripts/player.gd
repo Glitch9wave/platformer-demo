@@ -41,7 +41,7 @@ func _physics_process(delta):
 	var right = Input.is_action_pressed("ui_right") or Input.is_action_pressed("keycode_D")
 	var left = Input.is_action_pressed("ui_left") or Input.is_action_pressed("keycode_A")
 	
-	if (not right and not left) or (right and left):
+	if right != left:
 		if abs(velocity.x) < 100:
 			velocity.x = 0
 		else:
